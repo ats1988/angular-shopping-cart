@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+<script src="https://rawgithub.com/gsklee/ngStorage/master/ngStorage.js"></script>
+
+<script src="https://code.angularjs.org/1.2.6/angular-route.min.js"></script>
+
+<script src="http://code.angularjs.org/1.2.9/angular-animate.min.js"></script>
+
+<script src="https://code.angularjs.org/1.2.6/angular.min.js"></script>
+<script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css"></script>
+
+
+
+<script src="//www.parsecdn.com/js/parse-1.6.12.min.js"></script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+<!--  -->
+  <script src="http://code.angularjs.org/1.2.0rc1/angular-animate.min.js"></script>
+<!--  -->
+
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" />
+ <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+  <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css" rel="stylesheet">
+  <link href="stylesheet1.css" rel="stylesheet"/>
+
+
+<!-- <link rel="stylesheet" href="http://www.w3schools.com/lib/w3.css" />
+ -->
+
+
+<style type="text/css">
+
+
+
+</style>
+</head>
+<body ng-app="appS">
+
+<div id="soSoCartSum" class="btn btn-warning" ng-controller="cartEvents">
+
+<ngcart-summary style="font-size:0.8em;"></ngcart-summary>
+
+</div>
+
+<div id="main">
+
+<div id="soSo" class='btn btn-danger' ng-controller="forNotes">
+</div>
+
+
+
+
+<div id='header'>
+	<span id='spani'>
+		<sign-in id="signinId"></sign-in>
+		<br />  
+<div id='logoutblock' ng-controller="appCtrl">
+<button id='logout'>LOGOUT</button>&nbsp;<span id='spani_name' style='color:purple;'></span>
+</div>
+
+	</span>
+	<!-- <register-slide></register-slide> -->
+	<span id='spani2'  ng-controller="cartEvents">
+    <!--<h3>Summary (ngcart-summary)</h3>
+<ngcart-summary></ngcart-summary>
+
+
+<hr/>-->
+
+    <ngcart-cart></ngcart-cart>
+    <!--<a class="btn btn-lg btn-primary" ng-click="checkout()">Checkout</a>
+
+    <hr/>
+    <div ng-show="summary">
+        <h4>Summary</h4>
+        <pre> {{ summary |json}}</pre>
+    </div>-->
+
+    <script type="text/ng-template" id="template/ngCart/summary.html">
+    <div class="row">
+        <div class="col-md-2">
+            <svg version="1.1"  class="icon" xmlns="http://www.w3.org/2000/svg" width="30px" height="30px" xml:space="preserve">
+      <path d=""/>
+</svg>
+        </div>
+        <div class="col-md-6">{{ ngCart.totalItems() }}
+            <ng-pluralize count="ngCart.totalItems()" when="{1: 'item', 'other':'items'}"></ng-pluralize>
+            <br/>{{ ngCart.totalCost() | currency }}
+        </div>
+    </div>
+</script>
+
+
+<script type="text/ng-template" id="template/ngCart/cart.html">
+    <div style="text-align:center;" class="alert alert-warning" role="alert" ng-show="ngCart.totalItems() === 0">
+        <span style="font-size:1.6em;font-family:myFirstFont;" class="badge badge-danger">Your cart is empty</span>
+    </div>
+
+    <div class="table-responsive col-lg-12" ng-show="ngCart.totalItems() > 0">
+
+        <table class="table table-striped ngCart cart">
+
+            <thead>
+            <tr>
+                <th></th>
+                <th>Product Name</th>
+                <th>Quantity</th>
+                <th>Amount</th>
+                <th>Total</th>
+            </tr>
+            </thead>
+            <tfoot>
+            <tr ng-show="ngCart.getTax()">
+                <th></th>
+                <th></th>
+                <th></th>
+                <th>Tax ({{ ngCart.getCart().tax }}%):</th>
+                <th>{{ ngCart.getTax() | currency }}</th>
+            </tr>
+            <tr ng-show="ngCart.getShipping()">
+                <th></th>
+                <th></th>
+                <th></th>
+                <th>Shipping:</th>
+                <th>{{ ngCart.getShipping() | currency }}</th>
+            </tr>
+            <tr>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th>Total:</th>
+                <th>{{ ngCart.totalCost() | currency }}</th>
+            </tr>
+            </tfoot>
+            <tbody>
+            <tr ng-repeat="item in ngCart.getCart().items track by $index">
+                <td><span ng-click="ngCart.removeItem($index)" class="glyphicon glyphicon-remove"></span></td>
+                <td>{{ item.getName() }}</td>
+                <td><span class="glyphicon glyphicon-minus" ng-class="{'disabled':item.getQuantity()==1}"
+                          ng-click="item.setQuantity(-1, true)"></span>&nbsp;&nbsp;
+                    {{ item.getQuantity() | number }}&nbsp;&nbsp;
+                    <span class="glyphicon glyphicon-plus" ng-click="item.setQuantity(1, true)"></span></td>
+                <td>{{ item.getPrice() | currency}}</td>
+                <td>{{ item.getTotal() | currency }}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <style>
+        .ngCart.cart span[ng-click] {
+            cursor: pointer;
+        }
+
+        .ngCart.cart .glyphicon.disabled {
+            color: #aaa;
+        }
+    </style>
+</script>
+
+<script type="text/ng-template" id="template/ngCart/addtocart.html">
+    <div ng-hide="attrs.id">
+        <a class="btn btn-lg btn-primary" ng-disabled="true" ng-transclude></a>
+
+    </div>
+    <div ng-show="attrs.id">
+        <div ng-hide="inCart()">
+            <a class="btn btn-lg btn-primary"
+               ng-click="ngCart.addItem(id, name, price, quantity, data)"
+               ng-transclude></a>
+        </div>
+        <div class="alert alert-info" ng-show="inCart()">
+            <span class="glyphicon glyphicon-ok-sign"></span>
+        </div>
+
+    </div>
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+	</span><br />
+</div>
+<!--  ng-controller="TestingCtrl as testing" -->
+<div id='section'>
+<ul class="nav navbar-nav">
+<li><a href="#/homepage" class="btn btn-default" 3d-baby lazy-load-background>HOME</a></li>
+<li><a href="#/users"  class="btn btn-default" 3d-baby lazy-load-background>Products</a></li><!-- lazy-load-background -->
+<li><a href="#/chart"  class="btn btn-default" 3d-baby lazy-load-background>Users Chart</a></li>
+<li><a href="#/addUser"  class="btn btn-default" 3d-baby lazy-load-background>add User</a></li>
+<li><a href="#/checkOut" style="color:red;" class="btn btn-default" 3d-baby lazy-load-background>CheckOut</a></li>
+</ul><br />
+
+<div id='intro'>
+	<div class="modal"></div>
+<div ng-view></div>
+</div>
+	<script type=text/ng-template id="partial/users.html">
+<BR /><BR />
+
+
+    <!-- SEARCH BOX -->
+    <input type="search" class="form-control" 
+           ng-model="search"
+           placeholder="search Product" />
+    <span style='float:right;'></span>
+    <hr />
+    
+    <ul id='ul_products'>
+
+        <!--USER LIST-->
+        <li class="list-group-item item" 
+            ng-repeat="item in users | filter: search">
+            <!--RANDOM IMAGE-->
+            
+
+            <!--<img style="float:right;" src="http://lorempixel.com/50/50/sports/{{$index}}"  
+                class="img-circle" />-->
+
+            <!--LINK TO USER DETAILS-->
+           
+                    
+            <div class='card'>
+    <div class='front face' style="background-image:url(https://cdn2.iconfinder.com/data/icons/shopping-11/512/Basket-512.png)">
+      <table class="table sisi">
+      <tr><td>{{item.price}}</td></tr>
+      <tr><td><hr /></td></tr>
+      <tr><td>{{item.name}}</td></tr>
+      </table>
+    </div>
+    <div class="back face" style="background-image:url(http://lorempixel.com/50/50/sports/{{$index}});">
+    	<!--<img style="float:right;" src="http://lorempixel.com/50/50/sports/{{$index}}"  
+                class="img-circle" /><br />-->
+
+        <a class="btn btn-warning" style="width:100%;font-size:1.5em;" ng-href="#/users/{{item.name}}/{{item.age}}"> Details<!--{{item.name}}--> <span style="float:right;"><!--{{item.age}}--></span></a>
+        <br />
+        <div class="col-xs-6">
+       
+        <ngcart-addtocart id="{{item.name}}" name="{{item.name}}" price="{{item.price}}" quantity="{{item.qty}}"> <span style='font-family: myFirstFont;'><span class="glyphicon glyphicon-plus-sign"></span>&nbsp;Add to Cart<span></ngcart-addtocart>
+        </div>
+
+
+    </div>
+</div>
+
+
+        </li>
+
+    </ul>
+    
+</script>
+
+<!-- USER DETAILS -->    
+<script type=text/ng-template id="partial/user.html">
+      <BR /><BR /><BR />
+      <h3>USER VIEW: {{username}}</h3><br />
+      <h3>USER AGE: {{age}}  </h3>
+      <br /><a href="#/users"  class="btn btn-default" 3d-baby>Back</a>
+</script>
+
+<script type=text/ng-template id="partial/homepage.html">
+    <BR /><BR />
+  
+  <div class="jumbotron">    
+    <h1>{{title}}</h1>
+    <p class="lead">{{news}}</p>
+  </div>
+  
+
+</script>
+
+<script type=text/ng-template id="partial/register.html">
+      <BR /><BR />
+<div id="h32">
+
+<label>Sign Up</label>  
+<form id="signup">
+Username: <input id="signup-name" type="text" /><br />
+Password: <input id="signup-password" type="password" /><br />
+<span id='spanError' style='color:red;'></span><br />
+<input id="signup-submit" type="submit" class="btn"/>
+</form>
+
+</div>
+
+</script>
+
+<script type=text/ng-template id="partial/chart.html">
+      <BR /><BR />
+<div id="abs">
+<table id="list-posts" class="table list-group">
+<!-- 
+	lists of posts
+ -->
+ {{getAllUsers}}
+</table>
+</div>
+
+</script>
+
+<script type=text/ng-template id="partial/addUser.html">
+      <BR /><BR /><BR />
+
+<form id="post-form" name="form11" my-validate="{ notMatch: 'password1 == password2' }"
+class="form-horizontal" novalidate>
+<table class="table errors">
+<tr><div ng-show="form11.$invalid && !form11.$pristine" class="errors">
+<div ng-repeat="(errorType,fields) in form11.$error">
+<p ng-repeat="field in fields"> <span style='color:#515151;font-weight: bold;'>{{field.$name}}</span> | <span>{{errorType}}</span></p>
+</div>
+</div></tr>
+<tr><td><h4>Username</h4></td><td>
+<input id="post-username" name="urname" type="text" 
+class="form-control" ng-model="user.urname" ng-minlength="5" ng-maxlength="20" required/>
+</td></tr>
+<tr><td><h4>Password</h4></td><td><input id="post-password" type="password" name="password1" ng-model="user.password1" required/></td></tr>
+<tr><td><h4>Repeat Password</h4></td><td><input type="password" name="password2" ng-model="user.password2" required/></td></tr>
+<tr><td><h4>Email</h4></td><td><input id="post-email" type="email" name="emailAddress" class="form-control" required ng-model="user.emailF"/></td></tr>
+<tr><td>
+<button id="post-submit" type="submit" ng-disabled="!form11.$valid" class="btn" ng-click="save()">Save</button>
+</td><td>
+<button class="btn" ng-click="reset()">Reset</button>
+</td></tr>
+</table>
+</form>
+
+
+
+</script>
+<script  type=text/ng-template id="partial/checkOut.html">
+<br /><br />
+
+<div  ng-controller="cartEvents">
+  <table class="table">
+  <tr><td><a class="btn btn-lg btn-primary" ng-click="checkout()">Summary</a></td></tr>
+  <tr><td><div ng-show="summary">
+        <h4>Summary</h4>
+        <pre> {{ summary |json}}</pre>
+    </div></td></tr>
+  </table>
+
+
+</div>
+
+
+</script>
+
+<br /><br /><br />
+<footer>
+ 
+
+
+
+</footer>
+</div>
+
+
+</div>
+<br />
+
+
+
+<script type="text/javascript" src="projmodule1.js"></script>
+<script type="text/javascript" src="projTool1directories.js"></script>
+<script type="text/javascript" src="projTool2valuesConstant.js"></script>
+<script type="text/javascript" src="projTool3servicesFactories.js"></script>
+<script type="text/javascript" src="projTool4controllers.js"></script>
+<script type="text/javascript" src="projTool5configs.js"></script>
+<script type="text/javascript" src="ngCart.js"></script>
+<script type="text/javascript" src="ngValidate.js"></script>
+
+<!-- <lazy-load-background></lazy-load-background>
+ -->
+<script>
+
+$('#logoutblock').show();
+
+
+// $('#soSo').on('mouseleave',function(){
+// 	$(this).fadeIn(500).delay(1500).fadeOut(1000);
+// }).on('mouseenter',function(){
+// 	$(this).show().fadeIn();
+// });
+
+
+
+
+///////////
+var interval,collection,oldSize,newSize,spani,spani2;
+spani = $('#spani'); spani2 = $('#spani2');
+interval = 1000; collection = [];
+oldSize = parseFloat($(spani2).css('font-size')); newSize = oldSize * 4;
+
+var funC = function(){
+spani2.each(function(){
+	$(this).prop('Counter',0).animate({
+		Counter : $(this).text()
+	},{
+		duration: 2550,
+		easing: 'swing',
+		step: function(now){
+			$(this).text(Math.ceil(now));
+			}
+	});
+
+	collection.push({id:i, lastTimeOn: 0,lastTimeOff:0 });
+
+	var i = $(this).index();
+
+	var compare = Date.now() - collection[i].lastTimeOn;
+
+	if(compare > interval){
+		$(this).animate({ fontSize: newSize}, 500);
+		$(this).animate({ fontSize: oldSize}, interval);
+	}
+	collection[i].lastTimeOff = Date.now();
+});
+
+};
+
+ //funC();
+ ///////////////////
+
+</script>
+
+
+</body>
+</html>
